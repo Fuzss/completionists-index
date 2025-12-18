@@ -3,20 +3,21 @@ package fuzs.completionistsindex.client.gui.components.index;
 import com.google.common.collect.ImmutableList;
 import fuzs.completionistsindex.client.gui.screens.index.IndexViewScreen;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
+import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.stats.StatType;
 import net.minecraft.stats.Stats;
 import net.minecraft.stats.StatsCounter;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Util;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
@@ -27,9 +28,9 @@ import java.util.Optional;
 public abstract class IndexViewEntry<S extends IndexViewScreen<?>> {
     protected static final List<StatType<Item>> RELEVANT_STAT_TYPES = ImmutableList.of(Stats.ITEM_PICKED_UP,
             Stats.ITEM_CRAFTED);
-    private static final ResourceLocation SLOT_HIGHLIGHT_BACK_SPRITE = ResourceLocation.withDefaultNamespace(
+    private static final Identifier SLOT_HIGHLIGHT_BACK_SPRITE = Identifier.withDefaultNamespace(
             "container/slot_highlight_back");
-    private static final ResourceLocation SLOT_HIGHLIGHT_FRONT_SPRITE = ResourceLocation.withDefaultNamespace(
+    private static final Identifier SLOT_HIGHLIGHT_FRONT_SPRITE = Identifier.withDefaultNamespace(
             "container/slot_highlight_front");
 
     protected final S screen;
@@ -124,17 +125,21 @@ public abstract class IndexViewEntry<S extends IndexViewScreen<?>> {
                 10,
                 512,
                 256);
-        if (this.isClickable() && this.isMouseOver(posX, posY, mouseX, mouseY)) {
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
-                    IndexViewScreen.INDEX_LOCATION,
-                    posX - 2,
-                    posY - 2,
-                    316,
-                    0,
-                    140,
-                    22,
-                    512,
-                    256);
+        if (this.isMouseOver(posX, posY, mouseX, mouseY)) {
+            if (this.isClickable()) {
+                guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
+                        IndexViewScreen.INDEX_LOCATION,
+                        posX - 2,
+                        posY - 2,
+                        316,
+                        0,
+                        140,
+                        22,
+                        512,
+                        256);
+            }
+
+            this.screen.handleHoveringCursor(guiGraphics);
         }
     }
 
@@ -149,6 +154,7 @@ public abstract class IndexViewEntry<S extends IndexViewScreen<?>> {
                     24,
                     24);
         }
+
         guiGraphics.renderItem(this.itemStack, posX + 1, posY + 1);
         if (this.isHoveringSlot(posX, posY, mouseX, mouseY)) {
             guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
@@ -158,6 +164,7 @@ public abstract class IndexViewEntry<S extends IndexViewScreen<?>> {
                     24,
                     24);
         }
+
         renderScrollingString(guiGraphics,
                 font,
                 this.getStyledDisplayName(),
@@ -173,8 +180,8 @@ public abstract class IndexViewEntry<S extends IndexViewScreen<?>> {
     /**
      * Allows for rendering without enabled {@code dropShadow}.
      *
-     * @see net.minecraft.client.gui.components.AbstractWidget#renderScrollingString(GuiGraphics, Font, Component,
-     *         int, int, int, int, int)
+     * @see net.minecraft.client.gui.components.AbstractWidget#renderScrollingStringOverContents(ActiveTextCollector,
+     *         Component, int)
      */
     protected static void renderScrollingString(GuiGraphics guiGraphics, Font font, Component text, int minX, int minY, int maxX, int maxY, int color) {
         renderScrollingString(guiGraphics, font, text, (minX + maxX) / 2, minX, minY, maxX, maxY, color);
@@ -183,8 +190,8 @@ public abstract class IndexViewEntry<S extends IndexViewScreen<?>> {
     /**
      * Allows for rendering without enabled {@code dropShadow}.
      *
-     * @see net.minecraft.client.gui.components.AbstractWidget#renderScrollingString(GuiGraphics, Font, Component,
-     *         int, int, int, int, int, int)
+     * @see net.minecraft.client.gui.components.AbstractWidget#renderScrollingStringOverContents(ActiveTextCollector,
+     *         Component, int)
      */
     protected static void renderScrollingString(GuiGraphics guiGraphics, Font font, Component text, int centerX, int minX, int minY, int maxX, int maxY, int color) {
         int i = font.width(text);

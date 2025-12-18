@@ -1,10 +1,10 @@
 package fuzs.completionistsindex.client.gui.screens.index;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import fuzs.completionistsindex.client.gui.components.index.IndexViewEntry;
 import fuzs.completionistsindex.client.gui.components.index.IndexViewSingleEntry;
 import fuzs.puzzleslib.api.client.gui.v2.components.SpritelessImageButton;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -16,7 +16,7 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.StatsCounter;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -36,7 +36,7 @@ public class ItemsIndexViewScreen extends IndexViewScreen<StatsSorting> {
 
     @Nullable
     private ServerPlayer getPlayerFromServer() {
-        IntegratedServer integratedServer = Minecraft.getInstance().getSingleplayerServer();
+        IntegratedServer integratedServer = this.minecraft.getSingleplayerServer();
         if (integratedServer != null) {
             ServerPlayer serverPlayer = integratedServer.getPlayerList()
                     .getPlayer(integratedServer.getSingleplayerProfile().id());
@@ -50,6 +50,13 @@ public class ItemsIndexViewScreen extends IndexViewScreen<StatsSorting> {
 
     public @Nullable ServerPlayer getServerPlayer() {
         return this.isEditingPermitted ? this.serverPlayer : null;
+    }
+
+    @Override
+    public void handleHoveringCursor(GuiGraphics guiGraphics) {
+        if (this.serverPlayer != null) {
+            guiGraphics.requestCursor(this.isEditingPermitted ? CursorTypes.POINTING_HAND : CursorTypes.NOT_ALLOWED);
+        }
     }
 
     @Override
@@ -94,6 +101,7 @@ public class ItemsIndexViewScreen extends IndexViewScreen<StatsSorting> {
                         ((SpritelessImageButton) button).xTexStart = this.isEditingPermitted ? 368 + 5 : 342 + 5;
                     }));
         }
+
         this.rebuildPages();
     }
 

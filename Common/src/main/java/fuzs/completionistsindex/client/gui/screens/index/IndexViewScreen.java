@@ -18,17 +18,17 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Stream;
 
 public abstract class IndexViewScreen<T extends SortProvider<T>> extends StatsUpdateListener {
-    public static final ResourceLocation INDEX_LOCATION = CompletionistsIndex.id("textures/gui/index.png");
+    public static final Identifier INDEX_LOCATION = CompletionistsIndex.id("textures/gui/index.png");
     private static final Component PREVIOUS_PAGE_COMPONENT = Component.translatable("spectatorMenu.previous_page");
     private static final Component NEXT_PAGE_COMPONENT = Component.translatable("spectatorMenu.next_page");
     private static final Component SEARCH_HINT = Component.translatable("gui.recipebook.search_hint")
@@ -36,7 +36,7 @@ public abstract class IndexViewScreen<T extends SortProvider<T>> extends StatsUp
             .withStyle(ChatFormatting.GRAY);
     public static final RandomSource RANDOM = RandomSource.create();
 
-    private final boolean fromInventory;
+    private final boolean inGameUi;
     protected int imageWidth = 316;
     protected int imageHeight = 198;
     protected int leftPos;
@@ -55,10 +55,12 @@ public abstract class IndexViewScreen<T extends SortProvider<T>> extends StatsUp
     private ScreenRectangle magnifierIconPlacement;
     private long randomSeed;
 
-    protected IndexViewScreen(@Nullable Screen lastScreen, boolean fromInventory) {
+    protected IndexViewScreen(@Nullable Screen lastScreen, boolean inGameUi) {
         super(lastScreen);
-        this.fromInventory = fromInventory;
+        this.inGameUi = inGameUi;
     }
+
+    public abstract void handleHoveringCursor(GuiGraphics guiGraphics);
 
     protected abstract Stream<IndexViewEntry<?>> getPageEntries();
 
@@ -152,8 +154,9 @@ public abstract class IndexViewScreen<T extends SortProvider<T>> extends StatsUp
         this.resetLastSearch();
     }
 
-    public boolean isFromInventory() {
-        return this.fromInventory;
+    @Override
+    public boolean isInGameUi() {
+        return this.inGameUi;
     }
 
     private void resetLastSearch() {
@@ -166,12 +169,7 @@ public abstract class IndexViewScreen<T extends SortProvider<T>> extends StatsUp
 
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        if (this.fromInventory) {
-            this.renderTransparentBackground(guiGraphics);
-        } else {
-            super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
-        }
-
+        super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
                 INDEX_LOCATION,
                 this.leftPos + (this.imageWidth / 2 - 146) / 2,

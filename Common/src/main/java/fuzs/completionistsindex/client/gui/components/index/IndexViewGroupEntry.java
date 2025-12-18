@@ -6,7 +6,6 @@ import fuzs.completionistsindex.client.gui.screens.index.ItemsIndexViewScreen;
 import fuzs.completionistsindex.client.gui.screens.index.ModsIndexViewScreen;
 import fuzs.puzzleslib.api.client.gui.v2.GuiGraphicsHelper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -16,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.StatsCounter;
 import net.minecraft.util.ARGB;
+import net.minecraft.util.Util;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -123,9 +123,7 @@ public class IndexViewGroupEntry extends IndexViewEntry<ModsIndexViewScreen> {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent mouseButtonEvent) {
-        this.screen.minecraft.setScreen(new ItemsIndexViewScreen(this.screen,
-                this.screen.isFromInventory(),
-                this.items));
+        this.screen.minecraft.setScreen(new ItemsIndexViewScreen(this.screen, this.screen.isInGameUi(), this.items));
         this.screen.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         return true;
     }
