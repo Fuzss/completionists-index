@@ -14,7 +14,7 @@ import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.input.MouseButtonEvent;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -35,8 +35,12 @@ public class IndexButtonHandler {
                 == ClientConfig.IndexButtonScreen.PAUSE_MENU) {
             return;
         }
+
         recipeBookButton = findRecipeBookButton(widgets);
-        if (recipeBookButton == null) return;
+        if (recipeBookButton == null) {
+            return;
+        }
+
         collectorsLogButton = new SpritelessImageButton(recipeBookButton.getX() + recipeBookButton.getWidth() + 8,
                 recipeBookButton.getY(),
                 20,
@@ -60,6 +64,7 @@ public class IndexButtonHandler {
                 return imageButton;
             }
         }
+
         return null;
     }
 
@@ -75,6 +80,7 @@ public class IndexButtonHandler {
                 == ClientConfig.IndexButtonScreen.INVENTORY_MENU) {
             return;
         }
+
         AbstractWidget abstractWidget = new SpritelessImageButton(0,
                 0,
                 20,

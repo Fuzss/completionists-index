@@ -1,0 +1,61 @@
+{
+    "mod": {
+        "id": "completionistsindex",
+        "group": "fuzs.completionistsindex",
+        "name": "Completionist's Index",
+        "version": "21.11.0",
+        "authors": [
+            "Fuzs"
+        ],
+        "description": "An index for collecting every single block and item in the game. Adventurers behold!",
+        "license": "MPL-2.0"
+    },
+    "dependencies": [
+        {
+            "name": "fabricapi",
+            "type": "required",
+            "platforms": [
+                "fabric"
+            ]
+        },
+        {
+            "name": "forgeconfigapiport",
+            "type": "required",
+            "platforms": [
+                "fabric"
+            ]
+        },
+        {
+            "name": "puzzleslib",
+            "type": "required",
+            "platforms": [
+                "fabric",
+                "neoforge"
+            ]
+        }
+    ],
+    "links": [
+        {
+            "name": "github",
+            "slug": "completionistsindex"
+        },
+        {
+            "name": "curseforge",
+            "slug": "completionist's-index",
+            "id": "852667"
+        },
+        {
+            "name": "modrinth",
+            "slug": "completionist's-index",
+            "id": "iSCGCCV1"
+        }
+    ],
+    "environments": {
+        "client": "required",
+        "server": "unsupported"
+    },
+    "platforms": [
+        "fabric",
+        "neoforge"
+    ]
+}

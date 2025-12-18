@@ -83,6 +83,7 @@ public class IndexViewSingleEntry extends IndexViewEntry<ItemsIndexViewScreen> {
             } else {
                 serverPlayer.awardStat(RELEVANT_STAT_TYPES.getFirst().get(item));
             }
+
             this.initialize(statsCounter);
             this.screen.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             return true;

@@ -1,16 +1,17 @@
 package fuzs.completionistsindex.client.gui.screens.index;
 
+import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import fuzs.completionistsindex.client.gui.components.index.IndexViewEntry;
 import fuzs.completionistsindex.client.gui.components.index.IndexViewGroupEntry;
-import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerboundClientCommandPacket;
 import net.minecraft.stats.StatsCounter;
+import net.minecraft.util.Util;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.EnumMap;
@@ -30,6 +31,11 @@ public class ModsIndexViewScreen extends IndexViewScreen<IndexGroup> {
 
     public ModsIndexViewScreen(@Nullable Screen lastScreen, boolean fromInventory) {
         super(lastScreen, fromInventory);
+    }
+
+    @Override
+    public void handleHoveringCursor(GuiGraphics guiGraphics) {
+        guiGraphics.requestCursor(CursorTypes.POINTING_HAND);
     }
 
     @Override
