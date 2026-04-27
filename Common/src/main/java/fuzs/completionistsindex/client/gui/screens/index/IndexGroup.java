@@ -5,7 +5,7 @@ import com.google.common.collect.Ordering;
 import fuzs.completionistsindex.CompletionistsIndex;
 import fuzs.completionistsindex.client.gui.components.index.IndexViewEntry;
 import fuzs.completionistsindex.config.ClientConfig;
-import fuzs.puzzleslib.api.core.v1.ModContainer;
+import fuzs.puzzleslib.common.api.core.v1.ModContainer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;

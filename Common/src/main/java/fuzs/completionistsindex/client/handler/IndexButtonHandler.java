@@ -1,19 +1,18 @@
 package fuzs.completionistsindex.client.handler;
 
 import fuzs.completionistsindex.CompletionistsIndex;
-import fuzs.completionistsindex.client.gui.screens.index.IndexViewScreen;
 import fuzs.completionistsindex.client.gui.screens.index.ModsIndexViewScreen;
 import fuzs.completionistsindex.config.ClientConfig;
-import fuzs.puzzleslib.api.client.gui.v2.components.ScreenElementPositioner;
-import fuzs.puzzleslib.api.client.gui.v2.components.SpritelessImageButton;
-import net.minecraft.client.Minecraft;
+import fuzs.puzzleslib.common.api.client.gui.v2.components.ScreenElementPositioner;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.network.chat.CommonComponents;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -21,6 +20,10 @@ import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 public class IndexButtonHandler {
+    private static final WidgetSprites INVENTORY_BUTTON_SPRITES = new WidgetSprites(CompletionistsIndex.id(
+            "index/inventory_button"), CompletionistsIndex.id("index/inventory_button_highlighted"));
+    private static final WidgetSprites MENU_BUTTON_SPRITES = new WidgetSprites(CompletionistsIndex.id(
+            "index/menu_button"), CompletionistsIndex.id("index/menu_button_highlighted"));
     private static final String[] VANILLA_BUTTON_TRANSLATION_KEYS = {
             "gui.stats", "menu.returnToGame", "menu.reportBugs", "menu.shareToLan"
     };
@@ -30,7 +33,7 @@ public class IndexButtonHandler {
     @Nullable
     private static AbstractWidget collectorsLogButton;
 
-    public static void onAfterInventoryScreenInit(Minecraft minecraft, InventoryScreen screen, int screenWidth, int screenHeight, List<AbstractWidget> widgets, UnaryOperator<AbstractWidget> addWidget, Consumer<AbstractWidget> removeWidget) {
+    public static void onAfterInventoryScreenInit(InventoryScreen screen, int screenWidth, int screenHeight, List<AbstractWidget> widgets, UnaryOperator<AbstractWidget> addWidget, Consumer<AbstractWidget> removeWidget) {
         if (CompletionistsIndex.CONFIG.get(ClientConfig.class).indexButtonScreen
                 == ClientConfig.IndexButtonScreen.PAUSE_MENU) {
             return;
@@ -41,18 +44,13 @@ public class IndexButtonHandler {
             return;
         }
 
-        collectorsLogButton = new SpritelessImageButton(recipeBookButton.getX() + recipeBookButton.getWidth() + 8,
+        collectorsLogButton = new ImageButton(recipeBookButton.getX() + recipeBookButton.getWidth() + 8,
                 recipeBookButton.getY(),
                 20,
                 18,
-                100,
-                198,
-                18,
-                IndexViewScreen.INDEX_LOCATION,
-                512,
-                256,
+                INVENTORY_BUTTON_SPRITES,
                 (Button button) -> {
-                    minecraft.setScreen(new ModsIndexViewScreen(screen, true));
+                    screen.minecraft.setScreen(new ModsIndexViewScreen(screen, true));
                 });
         addWidget.apply(collectorsLogButton);
     }
@@ -75,25 +73,15 @@ public class IndexButtonHandler {
         }
     }
 
-    public static void onAfterPauseScreenInit(Minecraft minecraft, PauseScreen screen, int screenWidth, int screenHeight, List<AbstractWidget> widgets, UnaryOperator<AbstractWidget> addWidget, Consumer<AbstractWidget> removeWidget) {
+    public static void onAfterPauseScreenInit(PauseScreen screen, int screenWidth, int screenHeight, List<AbstractWidget> widgets, UnaryOperator<AbstractWidget> addWidget, Consumer<AbstractWidget> removeWidget) {
         if (CompletionistsIndex.CONFIG.get(ClientConfig.class).indexButtonScreen
                 == ClientConfig.IndexButtonScreen.INVENTORY_MENU) {
             return;
         }
 
-        AbstractWidget abstractWidget = new SpritelessImageButton(0,
-                0,
-                20,
-                20,
-                80,
-                198,
-                20,
-                IndexViewScreen.INDEX_LOCATION,
-                512,
-                256,
-                (Button button) -> {
-                    minecraft.setScreen(new ModsIndexViewScreen(screen, false));
-                });
+        AbstractWidget abstractWidget = new ImageButton(20, 20, MENU_BUTTON_SPRITES, (Button button) -> {
+            screen.minecraft.setScreen(new ModsIndexViewScreen(screen, false));
+        }, CommonComponents.EMPTY);
         if (ScreenElementPositioner.tryPositionElement(abstractWidget, widgets, VANILLA_BUTTON_TRANSLATION_KEYS)) {
             addWidget.apply(abstractWidget);
         }

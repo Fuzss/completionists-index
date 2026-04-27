@@ -3,13 +3,9 @@ package fuzs.completionistsindex.client.gui.screens.index;
 import com.google.common.collect.ImmutableList;
 import fuzs.completionistsindex.CompletionistsIndex;
 import fuzs.completionistsindex.client.gui.components.index.IndexViewEntry;
-import fuzs.puzzleslib.api.client.gui.v2.components.SpritelessImageButton;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.Renderable;
-import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.navigation.ScreenAxis;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
@@ -29,6 +25,14 @@ import java.util.stream.Stream;
 
 public abstract class IndexViewScreen<T extends SortProvider<T>> extends StatsUpdateListener {
     public static final Identifier INDEX_LOCATION = CompletionistsIndex.id("textures/gui/index.png");
+    private static final WidgetSprites CLOSE_BUTTON_SPRITES = new WidgetSprites(CompletionistsIndex.id(
+            "index/close_button"), CompletionistsIndex.id("index/close_button_highlighted"));
+    private static final WidgetSprites SORT_BUTTON_SPRITES = new WidgetSprites(CompletionistsIndex.id(
+            "index/sort_button"), CompletionistsIndex.id("index/sort_button_highlighted"));
+    private static final WidgetSprites PREVIOUS_PAGE_BUTTON_SPRITES = new WidgetSprites(CompletionistsIndex.id(
+            "index/previous_page_button"), CompletionistsIndex.id("index/previous_page_button_highlighted"));
+    private static final WidgetSprites NEXT_PAGE_BUTTON_SPRITES = new WidgetSprites(CompletionistsIndex.id(
+            "index/next_page_button"), CompletionistsIndex.id("index/next_page_button_highlighted"));
     private static final Component PREVIOUS_PAGE_COMPONENT = Component.translatable("spectatorMenu.previous_page");
     private static final Component NEXT_PAGE_COMPONENT = Component.translatable("spectatorMenu.next_page");
     private static final Component SEARCH_HINT = Component.translatable("gui.recipebook.search_hint")
@@ -60,7 +64,7 @@ public abstract class IndexViewScreen<T extends SortProvider<T>> extends StatsUp
         this.inGameUi = inGameUi;
     }
 
-    public abstract void handleHoveringCursor(GuiGraphics guiGraphics);
+    public abstract void handleHoveringCursor(GuiGraphicsExtractor guiGraphics);
 
     protected abstract Stream<IndexViewEntry<?>> getPageEntries();
 
@@ -93,59 +97,38 @@ public abstract class IndexViewScreen<T extends SortProvider<T>> extends StatsUp
         this.searchBox.setVisible(true);
         this.searchBox.setTextColor(-1);
         this.searchBox.setHint(SEARCH_HINT);
-        this.addRenderableWidget(new SpritelessImageButton(this.leftPos + this.imageWidth - 6 - 26 + 5,
+        this.addRenderableWidget(new ImageButton(this.leftPos + this.imageWidth - 6 - 26 + 5,
                 this.topPos - 23 + 5,
                 16,
                 16,
-                this.imageWidth + 5,
-                45 + 5,
-                16 + 7,
-                INDEX_LOCATION,
-                512,
-                256,
+                CLOSE_BUTTON_SPRITES,
                 (Button button) -> {
                     this.onClose();
                 }));
-        this.addRenderableWidget(new SpritelessImageButton(this.leftPos + this.imageWidth - 17 - 16,
+        this.addRenderableWidget(new ImageButton(this.leftPos + this.imageWidth - 17 - 16,
                 this.topPos + 11,
                 16,
                 13,
-                62,
-                202,
-                20,
-                INDEX_LOCATION,
-                512,
-                256,
+                SORT_BUTTON_SPRITES,
                 (Button button) -> {
                     this.setSortProvider(this.getSortProvider().cycle());
                     button.setTooltip(Tooltip.create(this.getSortProvider().getComponent()));
                     this.rebuildPages();
                 })).setTooltip(Tooltip.create(this.getSortProvider().getComponent()));
-        this.turnPageBackwards = this.addRenderableWidget(new SpritelessImageButton(this.leftPos + 27,
+        this.turnPageBackwards = this.addRenderableWidget(new ImageButton(this.leftPos + 27,
                 this.topPos + 173,
                 18,
                 10,
-                1,
-                203,
-                20,
-                INDEX_LOCATION,
-                512,
-                256,
+                PREVIOUS_PAGE_BUTTON_SPRITES,
                 (Button button) -> {
                     this.decrementPage();
                 }));
         this.turnPageBackwards.setTooltip(Tooltip.create(PREVIOUS_PAGE_COMPONENT));
-        this.turnPageForwards = this.addRenderableWidget(new SpritelessImageButton(
-                this.leftPos + this.imageWidth - 27 - 18,
+        this.turnPageForwards = this.addRenderableWidget(new ImageButton(this.leftPos + this.imageWidth - 27 - 18,
                 this.topPos + 173,
                 18,
                 10,
-                21,
-                203,
-                20,
-                INDEX_LOCATION,
-                512,
-                256,
+                NEXT_PAGE_BUTTON_SPRITES,
                 (Button button) -> {
                     this.incrementPage();
                 }));
@@ -168,8 +151,8 @@ public abstract class IndexViewScreen<T extends SortProvider<T>> extends StatsUp
     protected abstract void setSortProvider(T sortProvider);
 
     @Override
-    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(guiGraphics, mouseX, mouseY, partialTick);
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
                 INDEX_LOCATION,
                 this.leftPos + (this.imageWidth / 2 - 146) / 2,
@@ -200,13 +183,13 @@ public abstract class IndexViewScreen<T extends SortProvider<T>> extends StatsUp
                 this.imageHeight,
                 512,
                 256);
-        guiGraphics.drawString(this.font,
+        guiGraphics.text(this.font,
                 this.leftPageIndicator,
                 this.leftPos + 82 - this.font.width(this.leftPageIndicator) / 2,
                 this.topPos + 13,
                 0xFFB8A48A,
                 false);
-        guiGraphics.drawString(this.font,
+        guiGraphics.text(this.font,
                 this.rightPageIndicator,
                 this.leftPos + 233 - this.font.width(this.rightPageIndicator) / 2,
                 this.topPos + 13,
@@ -215,12 +198,12 @@ public abstract class IndexViewScreen<T extends SortProvider<T>> extends StatsUp
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.setFocused(null);
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
-        this.searchBox.render(guiGraphics, mouseX, mouseY, partialTick);
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
+        this.searchBox.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
         if (this.pages != null && !this.pages.isEmpty()) {
-            this.pages.get(this.currentPage).render(guiGraphics, mouseX, mouseY, partialTick);
+            this.pages.get(this.currentPage).extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
         }
     }
 
@@ -351,7 +334,7 @@ public abstract class IndexViewScreen<T extends SortProvider<T>> extends StatsUp
         }
 
         @Override
-        public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
             this.renderPageSide(guiGraphics,
                     mouseX,
                     mouseY,
@@ -370,7 +353,7 @@ public abstract class IndexViewScreen<T extends SortProvider<T>> extends StatsUp
                     14);
         }
 
-        private void renderPageSide(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, int startX, int startY, int startIndex, int endIndex) {
+        private void renderPageSide(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick, int startX, int startY, int startIndex, int endIndex) {
             for (int i = startIndex, posY = startY; i < endIndex; i++) {
                 IndexViewEntry<?> indexViewEntry = this.entries[i];
                 if (indexViewEntry != null) {

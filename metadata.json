@@ -1,9 +1,10 @@
 {
+    "minecraft": "26.1.2",
     "mod": {
         "id": "completionistsindex",
         "group": "fuzs.completionistsindex",
         "name": "Completionist's Index",
-        "version": "21.11.0",
+        "version": "26.1.0",
         "authors": [
             "Fuzs"
         ],
@@ -36,13 +37,13 @@
     ],
     "links": [
         {
-            "name": "github",
-            "slug": "completionistsindex"
-        },
-        {
             "name": "curseforge",
             "slug": "completionist's-index",
             "id": "852667"
+        },
+        {
+            "name": "github",
+            "slug": "completionists-index"
         },
         {
             "name": "modrinth",

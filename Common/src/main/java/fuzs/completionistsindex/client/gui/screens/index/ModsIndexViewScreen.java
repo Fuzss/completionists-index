@@ -3,7 +3,7 @@ package fuzs.completionistsindex.client.gui.screens.index;
 import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import fuzs.completionistsindex.client.gui.components.index.IndexViewEntry;
 import fuzs.completionistsindex.client.gui.components.index.IndexViewGroupEntry;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerboundClientCommandPacket;
@@ -34,7 +34,7 @@ public class ModsIndexViewScreen extends IndexViewScreen<IndexGroup> {
     }
 
     @Override
-    public void handleHoveringCursor(GuiGraphics guiGraphics) {
+    public void handleHoveringCursor(GuiGraphicsExtractor guiGraphics) {
         guiGraphics.requestCursor(CursorTypes.POINTING_HAND);
     }
 
@@ -95,10 +95,10 @@ public class ModsIndexViewScreen extends IndexViewScreen<IndexGroup> {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
         if (this.isLoading) {
-            guiGraphics.drawString(this.font,
+            guiGraphics.text(this.font,
                     PENDING_TEXT,
                     (this.width - this.font.width(PENDING_TEXT)) / 2,
                     this.topPos + 198 / 2 - 9 * 2,
@@ -106,7 +106,7 @@ public class ModsIndexViewScreen extends IndexViewScreen<IndexGroup> {
                     false);
             Component component = Component.literal(LOADING_SYMBOLS[(int) (Util.getMillis() / 150L
                     % (long) LOADING_SYMBOLS.length)]);
-            guiGraphics.drawString(this.font,
+            guiGraphics.text(this.font,
                     component,
                     (this.width - this.font.width(component)) / 2,
                     this.topPos + 198 / 2,

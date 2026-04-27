@@ -4,10 +4,10 @@ import com.google.common.collect.ImmutableList;
 import fuzs.completionistsindex.client.gui.screens.index.IndexViewScreen;
 import fuzs.completionistsindex.client.gui.screens.index.ItemsIndexViewScreen;
 import fuzs.completionistsindex.client.gui.screens.index.ModsIndexViewScreen;
-import fuzs.puzzleslib.api.client.gui.v2.GuiGraphicsHelper;
+import fuzs.puzzleslib.common.api.client.gui.v2.GuiGraphicsHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -74,7 +74,7 @@ public class IndexViewGroupEntry extends IndexViewEntry<ModsIndexViewScreen> {
     }
 
     @Override
-    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, int posX, int posY) {
+    public void renderBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick, int posX, int posY) {
         super.renderBackground(guiGraphics, mouseX, mouseY, partialTick, posX, posY);
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
                 IndexViewScreen.INDEX_LOCATION,
@@ -104,7 +104,7 @@ public class IndexViewGroupEntry extends IndexViewEntry<ModsIndexViewScreen> {
     }
 
     @Override
-    public void renderForeground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, int posX, int posY, Font font) {
+    public void renderForeground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick, int posX, int posY, Font font) {
         super.renderForeground(guiGraphics, mouseX, mouseY, partialTick, posX, posY, font);
         Component progressComponent = this.getProgressComponent(this.collectedItems);
         GuiGraphicsHelper.drawInBatch8xOutline(guiGraphics,

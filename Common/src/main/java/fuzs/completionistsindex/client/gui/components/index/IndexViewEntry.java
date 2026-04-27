@@ -5,7 +5,7 @@ import fuzs.completionistsindex.client.gui.screens.index.IndexViewScreen;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -82,7 +82,7 @@ public abstract class IndexViewEntry<S extends IndexViewScreen<?>> {
                 .sum();
     }
 
-    public final void renderWithTooltip(Font font, GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, int posX, int posY) {
+    public final void renderWithTooltip(Font font, GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick, int posX, int posY) {
         this.renderBackground(guiGraphics, mouseX, mouseY, partialTick, posX, posY);
         this.renderForeground(guiGraphics, mouseX, mouseY, partialTick, posX, posY, font);
         if (this.isHoveringSlot(posX, posY, mouseX, mouseY)) {
@@ -104,7 +104,7 @@ public abstract class IndexViewEntry<S extends IndexViewScreen<?>> {
 
     public abstract boolean mouseClicked(MouseButtonEvent mouseButtonEvent);
 
-    protected void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, int posX, int posY) {
+    protected void renderBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick, int posX, int posY) {
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
                 IndexViewScreen.INDEX_LOCATION,
                 posX,
@@ -145,7 +145,7 @@ public abstract class IndexViewEntry<S extends IndexViewScreen<?>> {
 
     protected abstract boolean isClickable();
 
-    protected void renderForeground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, int posX, int posY, Font font) {
+    protected void renderForeground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick, int posX, int posY, Font font) {
         if (this.isHoveringSlot(posX, posY, mouseX, mouseY)) {
             guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
                     SLOT_HIGHLIGHT_BACK_SPRITE,
@@ -155,7 +155,7 @@ public abstract class IndexViewEntry<S extends IndexViewScreen<?>> {
                     24);
         }
 
-        guiGraphics.renderItem(this.itemStack, posX + 1, posY + 1);
+        guiGraphics.item(this.itemStack, posX + 1, posY + 1);
         if (this.isHoveringSlot(posX, posY, mouseX, mouseY)) {
             guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
                     SLOT_HIGHLIGHT_FRONT_SPRITE,
@@ -180,20 +180,20 @@ public abstract class IndexViewEntry<S extends IndexViewScreen<?>> {
     /**
      * Allows for rendering without enabled {@code dropShadow}.
      *
-     * @see net.minecraft.client.gui.components.AbstractWidget#renderScrollingStringOverContents(ActiveTextCollector,
+     * @see net.minecraft.client.gui.components.AbstractWidget#extractScrollingStringOverContents(ActiveTextCollector,
      *         Component, int)
      */
-    protected static void renderScrollingString(GuiGraphics guiGraphics, Font font, Component text, int minX, int minY, int maxX, int maxY, int color) {
+    protected static void renderScrollingString(GuiGraphicsExtractor guiGraphics, Font font, Component text, int minX, int minY, int maxX, int maxY, int color) {
         renderScrollingString(guiGraphics, font, text, (minX + maxX) / 2, minX, minY, maxX, maxY, color);
     }
 
     /**
      * Allows for rendering without enabled {@code dropShadow}.
      *
-     * @see net.minecraft.client.gui.components.AbstractWidget#renderScrollingStringOverContents(ActiveTextCollector,
+     * @see net.minecraft.client.gui.components.AbstractWidget#extractScrollingStringOverContents(ActiveTextCollector,
      *         Component, int)
      */
-    protected static void renderScrollingString(GuiGraphics guiGraphics, Font font, Component text, int centerX, int minX, int minY, int maxX, int maxY, int color) {
+    protected static void renderScrollingString(GuiGraphicsExtractor guiGraphics, Font font, Component text, int centerX, int minX, int minY, int maxX, int maxY, int color) {
         int i = font.width(text);
         int j = (minY + maxY - 9) / 2 + 1;
         int k = maxX - minX;
@@ -204,12 +204,12 @@ public abstract class IndexViewEntry<S extends IndexViewScreen<?>> {
             double f = Math.sin((Math.PI / 2) * Math.cos((Math.PI * 2) * d / e)) / 2.0 + 0.5;
             double g = Mth.lerp(f, 0.0, l);
             guiGraphics.enableScissor(minX, minY, maxX, maxY);
-            guiGraphics.drawString(font, text, minX - (int) g, j, color, false);
+            guiGraphics.text(font, text, minX - (int) g, j, color, false);
             guiGraphics.disableScissor();
         } else {
             int l = Mth.clamp(centerX, minX + i / 2, maxX - i / 2);
             FormattedCharSequence formattedCharSequence = text.getVisualOrderText();
-            guiGraphics.drawString(font, text, l - font.width(formattedCharSequence) / 2, j, color, false);
+            guiGraphics.text(font, text, l - font.width(formattedCharSequence) / 2, j, color, false);
         }
     }
 }

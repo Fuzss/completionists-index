@@ -1,6 +1,6 @@
 package fuzs.completionistsindex.client.gui.screens.index;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.achievement.StatsScreen;
@@ -26,21 +26,21 @@ public abstract class StatsUpdateListener extends StatsScreen {
     }
 
     /**
-     * @see Screen#render(GuiGraphics, int, int, float)
+     * @see Screen#extractRenderState(GuiGraphicsExtractor, int, int, float)
      */
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
         for (Renderable renderable : this.renderables) {
-            renderable.render(guiGraphics, mouseX, mouseY, partialTick);
+            renderable.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
         }
     }
 
     /**
-     * @see Screen#renderMenuBackground(GuiGraphics)
+     * @see Screen#extractMenuBackground(GuiGraphicsExtractor)
      */
     @Override
-    protected void renderMenuBackground(GuiGraphics guiGraphics) {
-        this.renderMenuBackground(guiGraphics, 0, 0, this.width, this.height);
+    protected void extractMenuBackground(GuiGraphicsExtractor guiGraphics) {
+        this.extractMenuBackground(guiGraphics, 0, 0, this.width, this.height);
     }
 
     /**

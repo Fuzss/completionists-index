@@ -2,12 +2,11 @@ package fuzs.completionistsindex.client.gui.screens.index;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.cursor.CursorTypes;
+import fuzs.completionistsindex.CompletionistsIndex;
 import fuzs.completionistsindex.client.gui.components.index.IndexViewEntry;
 import fuzs.completionistsindex.client.gui.components.index.IndexViewSingleEntry;
-import fuzs.puzzleslib.api.client.gui.v2.components.SpritelessImageButton;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -22,11 +21,20 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class ItemsIndexViewScreen extends IndexViewScreen<StatsSorting> {
+    private static final WidgetSprites BACK_BUTTON_SPRITES = new WidgetSprites(CompletionistsIndex.id(
+            "index/back_button"), CompletionistsIndex.id("index/back_button_highlighted"));
+    private static final WidgetSprites ENABLE_EDITING_BUTTON_SPRITES = new WidgetSprites(CompletionistsIndex.id(
+            "index/enable_editing_button"), CompletionistsIndex.id("index/enable_editing_button_highlighted"));
+    private static final WidgetSprites DISABLE_EDITING_BUTTON_SPRITES = new WidgetSprites(CompletionistsIndex.id(
+            "index/disable_editing_button"), CompletionistsIndex.id("index/disable_editing_button_highlighted"));
+
     private static StatsSorting statsSorting = StatsSorting.COLLECTED;
     private final List<ItemStack> items;
     @Nullable
     private final ServerPlayer serverPlayer;
     private boolean isEditingPermitted;
+    private AbstractWidget enableEditingButton;
+    private AbstractWidget disableEditingButton;
 
     public ItemsIndexViewScreen(Screen lastScreen, boolean fromInventory, List<ItemStack> items) {
         super(lastScreen, fromInventory);
@@ -53,7 +61,7 @@ public class ItemsIndexViewScreen extends IndexViewScreen<StatsSorting> {
     }
 
     @Override
-    public void handleHoveringCursor(GuiGraphics guiGraphics) {
+    public void handleHoveringCursor(GuiGraphicsExtractor guiGraphics) {
         if (this.serverPlayer != null) {
             guiGraphics.requestCursor(this.isEditingPermitted ? CursorTypes.POINTING_HAND : CursorTypes.NOT_ALLOWED);
         }
@@ -72,37 +80,40 @@ public class ItemsIndexViewScreen extends IndexViewScreen<StatsSorting> {
     @Override
     protected void init() {
         super.init();
-        this.addRenderableWidget(new SpritelessImageButton(this.leftPos + 17,
+        this.addRenderableWidget(new ImageButton(this.leftPos + 17,
                 this.topPos + 11,
                 16,
                 13,
-                42,
-                202,
-                20,
-                INDEX_LOCATION,
-                512,
-                256,
+                BACK_BUTTON_SPRITES,
                 (Button button) -> {
                     this.minecraft.setScreen(this.lastScreen);
                 })).setTooltip(Tooltip.create(CommonComponents.GUI_BACK));
         if (this.serverPlayer != null) {
-            this.addRenderableWidget(new SpritelessImageButton(this.leftPos + 316 - 6 - 26 * 2 + 5 - 3,
-                    this.topPos - 23 + 5,
-                    16,
-                    16,
-                    this.isEditingPermitted ? 368 + 5 : 342 + 5,
-                    45 + 5,
-                    16 + 7,
-                    INDEX_LOCATION,
-                    512,
-                    256,
-                    (Button button) -> {
-                        this.isEditingPermitted = !this.isEditingPermitted;
-                        ((SpritelessImageButton) button).xTexStart = this.isEditingPermitted ? 368 + 5 : 342 + 5;
-                    }));
+            this.enableEditingButton = this.addRenderableWidget(this.createEditingButton(ENABLE_EDITING_BUTTON_SPRITES,
+                    true));
+            this.disableEditingButton = this.addRenderableWidget(this.createEditingButton(DISABLE_EDITING_BUTTON_SPRITES,
+                    false));
+            this.setEditingPermitted(this.isEditingPermitted);
         }
 
         this.rebuildPages();
+    }
+
+    private AbstractWidget createEditingButton(WidgetSprites widgetSprites, boolean isEditingPermitted) {
+        return new ImageButton(this.leftPos + 316 - 6 - 26 * 2 + 5 - 3,
+                this.topPos - 23 + 5,
+                16,
+                16,
+                widgetSprites,
+                (Button button) -> {
+                    this.setEditingPermitted(isEditingPermitted);
+                });
+    }
+
+    private void setEditingPermitted(boolean isEditingPermitted) {
+        this.isEditingPermitted = isEditingPermitted;
+        this.enableEditingButton.active = !isEditingPermitted;
+        this.disableEditingButton.active = isEditingPermitted;
     }
 
     @Override
@@ -116,8 +127,8 @@ public class ItemsIndexViewScreen extends IndexViewScreen<StatsSorting> {
     }
 
     @Override
-    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(guiGraphics, mouseX, mouseY, partialTick);
         if (this.serverPlayer != null) {
             guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
                     INDEX_LOCATION,
