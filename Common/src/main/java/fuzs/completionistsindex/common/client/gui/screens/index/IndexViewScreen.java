@@ -1,8 +1,8 @@
-package fuzs.completionistsindex.client.gui.screens.index;
+package fuzs.completionistsindex.common.client.gui.screens.index;
 
 import com.google.common.collect.ImmutableList;
-import fuzs.completionistsindex.CompletionistsIndex;
-import fuzs.completionistsindex.client.gui.components.index.IndexViewEntry;
+import fuzs.completionistsindex.common.CompletionistsIndex;
+import fuzs.completionistsindex.common.client.gui.components.index.IndexViewEntry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.*;
@@ -24,7 +24,9 @@ import java.util.Locale;
 import java.util.stream.Stream;
 
 public abstract class IndexViewScreen<T extends SortProvider<T>> extends StatsUpdateListener {
-    public static final Identifier INDEX_LOCATION = CompletionistsIndex.id("textures/gui/index.png");
+    private static final Identifier INDEX_LOCATION = CompletionistsIndex.id("textures/gui/index.png");
+    private static final Identifier SEARCH_BACKGROUND_SPRITE = CompletionistsIndex.id("index/search_background");
+    static final Identifier BUTTON_BACKGROUND_SPRITE = CompletionistsIndex.id("index/button_background");
     private static final WidgetSprites CLOSE_BUTTON_SPRITES = new WidgetSprites(CompletionistsIndex.id(
             "index/close_button"), CompletionistsIndex.id("index/close_button_highlighted"));
     private static final WidgetSprites SORT_BUTTON_SPRITES = new WidgetSprites(CompletionistsIndex.id(
@@ -51,6 +53,9 @@ public abstract class IndexViewScreen<T extends SortProvider<T>> extends StatsUp
     private Component leftPageIndicator;
     private Component rightPageIndicator;
     private List<IndexViewPage> pages;
+    /**
+     * @see net.minecraft.client.gui.screens.recipebook.RecipeBookComponent#searchBox
+     */
     @Nullable
     private EditBox searchBox;
     private String lastSearch = "";
@@ -153,26 +158,18 @@ public abstract class IndexViewScreen<T extends SortProvider<T>> extends StatsUp
     @Override
     public void extractBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.extractBackground(guiGraphics, mouseX, mouseY, partialTick);
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
-                INDEX_LOCATION,
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
+                SEARCH_BACKGROUND_SPRITE,
                 this.leftPos + (this.imageWidth / 2 - 146) / 2,
                 this.topPos - 23,
-                this.imageWidth,
-                22,
                 146,
-                23,
-                512,
-                256);
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
-                INDEX_LOCATION,
+                23);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
+                BUTTON_BACKGROUND_SPRITE,
                 this.leftPos + this.imageWidth - 6 - 26,
                 this.topPos - 23,
-                this.imageWidth,
-                45,
                 26,
-                23,
-                512,
-                256);
+                23);
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
                 INDEX_LOCATION,
                 this.leftPos,
@@ -239,8 +236,14 @@ public abstract class IndexViewScreen<T extends SortProvider<T>> extends StatsUp
     private void setCurrentPage(int newPage) {
         this.currentPage = newPage;
         this.turnPageBackwards.visible = this.turnPageForwards.visible = true;
-        if (newPage == 0) this.turnPageBackwards.visible = false;
-        if (newPage >= this.getAllPages() - 1) this.turnPageForwards.visible = false;
+        if (newPage == 0) {
+            this.turnPageBackwards.visible = false;
+        }
+
+        if (newPage >= this.getAllPages() - 1) {
+            this.turnPageForwards.visible = false;
+        }
+
         this.leftPageIndicator = Component.translatable("book.pageIndicator", newPage * 2 + 1, this.getAllPages() * 2);
         this.rightPageIndicator = Component.translatable("book.pageIndicator", newPage * 2 + 2, this.getAllPages() * 2);
     }

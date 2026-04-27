@@ -1,8 +1,8 @@
-package fuzs.completionistsindex.client.gui.screens.index;
+package fuzs.completionistsindex.common.client.gui.screens.index;
 
 import com.mojang.blaze3d.platform.cursor.CursorTypes;
-import fuzs.completionistsindex.client.gui.components.index.IndexViewEntry;
-import fuzs.completionistsindex.client.gui.components.index.IndexViewGroupEntry;
+import fuzs.completionistsindex.common.client.gui.components.index.IndexViewEntry;
+import fuzs.completionistsindex.common.client.gui.components.index.IndexViewGroupEntry;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;

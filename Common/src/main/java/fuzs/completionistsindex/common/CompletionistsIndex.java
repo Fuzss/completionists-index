@@ -1,6 +1,6 @@
-package fuzs.completionistsindex;
+package fuzs.completionistsindex.common;
 
-import fuzs.completionistsindex.config.ClientConfig;
+import fuzs.completionistsindex.common.config.ClientConfig;
 import fuzs.puzzleslib.common.api.config.v3.ConfigHolder;
 import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
 import net.minecraft.resources.Identifier;

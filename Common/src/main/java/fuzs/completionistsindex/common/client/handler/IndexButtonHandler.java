@@ -1,8 +1,8 @@
-package fuzs.completionistsindex.client.handler;
+package fuzs.completionistsindex.common.client.handler;
 
-import fuzs.completionistsindex.CompletionistsIndex;
-import fuzs.completionistsindex.client.gui.screens.index.ModsIndexViewScreen;
-import fuzs.completionistsindex.config.ClientConfig;
+import fuzs.completionistsindex.common.CompletionistsIndex;
+import fuzs.completionistsindex.common.client.gui.screens.index.ModsIndexViewScreen;
+import fuzs.completionistsindex.common.config.ClientConfig;
 import fuzs.puzzleslib.common.api.client.gui.v2.components.ScreenElementPositioner;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;

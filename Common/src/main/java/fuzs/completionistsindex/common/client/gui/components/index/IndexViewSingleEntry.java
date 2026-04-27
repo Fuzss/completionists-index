@@ -1,7 +1,7 @@
-package fuzs.completionistsindex.client.gui.components.index;
+package fuzs.completionistsindex.common.client.gui.components.index;
 
 import com.google.common.collect.ImmutableList;
-import fuzs.completionistsindex.client.gui.screens.index.ItemsIndexViewScreen;
+import fuzs.completionistsindex.common.client.gui.screens.index.ItemsIndexViewScreen;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;

@@ -1,9 +1,9 @@
-package fuzs.completionistsindex.data.client;
+package fuzs.completionistsindex.common.data.client;
 
-import fuzs.completionistsindex.CompletionistsIndex;
-import fuzs.completionistsindex.client.CompletionistsIndexClient;
-import fuzs.completionistsindex.client.gui.screens.index.IndexGroup;
-import fuzs.completionistsindex.client.gui.screens.index.StatsSorting;
+import fuzs.completionistsindex.common.CompletionistsIndex;
+import fuzs.completionistsindex.common.client.CompletionistsIndexClient;
+import fuzs.completionistsindex.common.client.gui.screens.index.IndexGroup;
+import fuzs.completionistsindex.common.client.gui.screens.index.StatsSorting;
 import fuzs.puzzleslib.common.api.client.data.v2.AbstractLanguageProvider;
 import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
 

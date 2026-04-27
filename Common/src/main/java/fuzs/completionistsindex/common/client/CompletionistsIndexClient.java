@@ -1,8 +1,8 @@
-package fuzs.completionistsindex.client;
+package fuzs.completionistsindex.common.client;
 
-import fuzs.completionistsindex.CompletionistsIndex;
-import fuzs.completionistsindex.client.gui.screens.index.ModsIndexViewScreen;
-import fuzs.completionistsindex.client.handler.IndexButtonHandler;
+import fuzs.completionistsindex.common.CompletionistsIndex;
+import fuzs.completionistsindex.common.client.gui.screens.index.ModsIndexViewScreen;
+import fuzs.completionistsindex.common.client.handler.IndexButtonHandler;
 import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
 import fuzs.puzzleslib.common.api.client.core.v1.context.KeyMappingsContext;
 import fuzs.puzzleslib.common.api.client.event.v1.gui.ScreenEvents;

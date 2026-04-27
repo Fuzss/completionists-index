@@ -1,7 +1,7 @@
 package fuzs.completionistsindex.fabric.client;
 
-import fuzs.completionistsindex.CompletionistsIndex;
-import fuzs.completionistsindex.client.CompletionistsIndexClient;
+import fuzs.completionistsindex.common.CompletionistsIndex;
+import fuzs.completionistsindex.common.client.CompletionistsIndexClient;
 import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
 import net.fabricmc.api.ClientModInitializer;
 

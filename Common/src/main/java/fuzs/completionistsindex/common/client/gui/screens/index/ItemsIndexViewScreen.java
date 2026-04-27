@@ -1,10 +1,10 @@
-package fuzs.completionistsindex.client.gui.screens.index;
+package fuzs.completionistsindex.common.client.gui.screens.index;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.cursor.CursorTypes;
-import fuzs.completionistsindex.CompletionistsIndex;
-import fuzs.completionistsindex.client.gui.components.index.IndexViewEntry;
-import fuzs.completionistsindex.client.gui.components.index.IndexViewSingleEntry;
+import fuzs.completionistsindex.common.CompletionistsIndex;
+import fuzs.completionistsindex.common.client.gui.components.index.IndexViewEntry;
+import fuzs.completionistsindex.common.client.gui.components.index.IndexViewSingleEntry;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.screens.Screen;
@@ -94,6 +94,8 @@ public class ItemsIndexViewScreen extends IndexViewScreen<StatsSorting> {
             this.disableEditingButton = this.addRenderableWidget(this.createEditingButton(DISABLE_EDITING_BUTTON_SPRITES,
                     false));
             this.setEditingPermitted(this.isEditingPermitted);
+        } else {
+            this.enableEditingButton = this.disableEditingButton = null;
         }
 
         this.rebuildPages();
@@ -112,8 +114,8 @@ public class ItemsIndexViewScreen extends IndexViewScreen<StatsSorting> {
 
     private void setEditingPermitted(boolean isEditingPermitted) {
         this.isEditingPermitted = isEditingPermitted;
-        this.enableEditingButton.active = !isEditingPermitted;
-        this.disableEditingButton.active = isEditingPermitted;
+        this.enableEditingButton.visible = !isEditingPermitted;
+        this.disableEditingButton.visible = isEditingPermitted;
     }
 
     @Override
@@ -130,16 +132,12 @@ public class ItemsIndexViewScreen extends IndexViewScreen<StatsSorting> {
     public void extractBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.extractBackground(guiGraphics, mouseX, mouseY, partialTick);
         if (this.serverPlayer != null) {
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
-                    INDEX_LOCATION,
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
+                    BUTTON_BACKGROUND_SPRITE,
                     this.leftPos + 316 - 6 - 26 * 2 - 3,
                     this.topPos - 23,
-                    this.isEditingPermitted ? 368 : 342,
-                    45,
                     26,
-                    23,
-                    512,
-                    256);
+                    23);
         }
     }
 

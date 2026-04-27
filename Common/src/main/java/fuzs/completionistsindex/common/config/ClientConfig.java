@@ -1,4 +1,4 @@
-package fuzs.completionistsindex.config;
+package fuzs.completionistsindex.common.config;
 
 import fuzs.puzzleslib.common.api.config.v3.Config;
 import fuzs.puzzleslib.common.api.config.v3.ConfigCore;

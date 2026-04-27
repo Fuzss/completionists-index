@@ -1,9 +1,10 @@
-package fuzs.completionistsindex.client.gui.components.index;
+package fuzs.completionistsindex.common.client.gui.components.index;
 
 import com.google.common.collect.ImmutableList;
-import fuzs.completionistsindex.client.gui.screens.index.IndexViewScreen;
-import fuzs.completionistsindex.client.gui.screens.index.ItemsIndexViewScreen;
-import fuzs.completionistsindex.client.gui.screens.index.ModsIndexViewScreen;
+import fuzs.completionistsindex.common.CompletionistsIndex;
+import fuzs.completionistsindex.common.client.gui.screens.index.IndexViewScreen;
+import fuzs.completionistsindex.common.client.gui.screens.index.ItemsIndexViewScreen;
+import fuzs.completionistsindex.common.client.gui.screens.index.ModsIndexViewScreen;
 import fuzs.puzzleslib.common.api.client.gui.v2.GuiGraphicsHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
@@ -12,6 +13,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.StatsCounter;
 import net.minecraft.util.ARGB;
@@ -23,6 +25,8 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public class IndexViewGroupEntry extends IndexViewEntry<ModsIndexViewScreen> {
+    private static final Identifier PROGRESS_SPRITE = CompletionistsIndex.id("index/progress");
+    private static final Identifier PROGRESS_BACKGROUND_SPRITE = CompletionistsIndex.id("index/progress_background");
     private static final DecimalFormat PERCENTAGE_FORMAT = new DecimalFormat("#.##");
 
     private final List<ItemStack> items;
@@ -76,26 +80,17 @@ public class IndexViewGroupEntry extends IndexViewEntry<ModsIndexViewScreen> {
     @Override
     public void renderBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick, int posX, int posY) {
         super.renderBackground(guiGraphics, mouseX, mouseY, partialTick, posX, posY);
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
-                IndexViewScreen.INDEX_LOCATION,
-                posX + 24,
-                posY + 11,
-                140,
-                198,
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, PROGRESS_BACKGROUND_SPRITE, posX + 24, posY + 11, 91, 5);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
+                PROGRESS_SPRITE,
                 91,
                 5,
-                512,
-                256);
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
-                IndexViewScreen.INDEX_LOCATION,
+                0,
+                0,
                 posX + 24,
                 posY + 11,
-                140,
-                203,
                 (int) (91 * this.getProgressAmount(this.collectedItems)),
-                5,
-                512,
-                256);
+                5);
     }
 
     @Override

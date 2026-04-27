@@ -1,7 +1,7 @@
 package fuzs.completionistsindex.neoforge;
 
-import fuzs.completionistsindex.CompletionistsIndex;
-import fuzs.completionistsindex.data.client.ModLanguageProvider;
+import fuzs.completionistsindex.common.CompletionistsIndex;
+import fuzs.completionistsindex.common.data.client.ModLanguageProvider;
 import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
 import fuzs.puzzleslib.neoforge.api.data.v2.core.DataProviderHelper;
 import net.neoforged.fml.common.Mod;

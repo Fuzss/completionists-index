@@ -1,6 +1,6 @@
-package fuzs.completionistsindex.client.gui.screens.index;
+package fuzs.completionistsindex.common.client.gui.screens.index;
 
-import fuzs.completionistsindex.client.gui.components.index.IndexViewEntry;
+import fuzs.completionistsindex.common.client.gui.components.index.IndexViewEntry;
 import net.minecraft.network.chat.Component;
 
 import java.util.Comparator;

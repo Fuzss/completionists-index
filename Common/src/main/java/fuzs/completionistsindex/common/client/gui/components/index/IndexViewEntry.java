@@ -1,11 +1,13 @@
-package fuzs.completionistsindex.client.gui.components.index;
+package fuzs.completionistsindex.common.client.gui.components.index;
 
 import com.google.common.collect.ImmutableList;
-import fuzs.completionistsindex.client.gui.screens.index.IndexViewScreen;
+import fuzs.completionistsindex.common.CompletionistsIndex;
+import fuzs.completionistsindex.common.client.gui.screens.index.IndexViewScreen;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -28,10 +30,10 @@ import java.util.Optional;
 public abstract class IndexViewEntry<S extends IndexViewScreen<?>> {
     protected static final List<StatType<Item>> RELEVANT_STAT_TYPES = ImmutableList.of(Stats.ITEM_PICKED_UP,
             Stats.ITEM_CRAFTED);
-    private static final Identifier SLOT_HIGHLIGHT_BACK_SPRITE = Identifier.withDefaultNamespace(
-            "container/slot_highlight_back");
-    private static final Identifier SLOT_HIGHLIGHT_FRONT_SPRITE = Identifier.withDefaultNamespace(
-            "container/slot_highlight_front");
+    private static final Identifier ITEM_BOX_SPRITE = CompletionistsIndex.id("index/item_box");
+    private static final Identifier EMPTY_TICK_BOX_SPRITE = CompletionistsIndex.id("index/empty_tick_box");
+    private static final Identifier CHECKED_TICK_BOX_SPRITE = CompletionistsIndex.id("index/checked_tick_box");
+    private static final Identifier HIGHLIGHT_BOX_SPRITE = CompletionistsIndex.id("index/highlight_box");
 
     protected final S screen;
     private final ItemStack itemStack;
@@ -105,38 +107,16 @@ public abstract class IndexViewEntry<S extends IndexViewScreen<?>> {
     public abstract boolean mouseClicked(MouseButtonEvent mouseButtonEvent);
 
     protected void renderBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick, int posX, int posY) {
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
-                IndexViewScreen.INDEX_LOCATION,
-                posX,
-                posY,
-                120,
-                208,
-                18,
-                18,
-                512,
-                256);
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
-                IndexViewScreen.INDEX_LOCATION,
-                posX + 124,
-                posY + 4,
-                120 + (this.isCollected() ? 10 : 0),
-                198,
-                10,
-                10,
-                512,
-                256);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, ITEM_BOX_SPRITE, posX, posY, 18, 18);
+        if (this.isCollected()) {
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, CHECKED_TICK_BOX_SPRITE, posX + 124, posY + 4, 10, 10);
+        } else {
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, EMPTY_TICK_BOX_SPRITE, posX + 124, posY + 4, 10, 10);
+        }
+
         if (this.isMouseOver(posX, posY, mouseX, mouseY)) {
             if (this.isClickable()) {
-                guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
-                        IndexViewScreen.INDEX_LOCATION,
-                        posX - 2,
-                        posY - 2,
-                        316,
-                        0,
-                        140,
-                        22,
-                        512,
-                        256);
+                guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, HIGHLIGHT_BOX_SPRITE, posX - 2, posY - 2, 140, 22);
             }
 
             this.screen.handleHoveringCursor(guiGraphics);
@@ -148,7 +128,7 @@ public abstract class IndexViewEntry<S extends IndexViewScreen<?>> {
     protected void renderForeground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick, int posX, int posY, Font font) {
         if (this.isHoveringSlot(posX, posY, mouseX, mouseY)) {
             guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
-                    SLOT_HIGHLIGHT_BACK_SPRITE,
+                    AbstractContainerScreen.SLOT_HIGHLIGHT_BACK_SPRITE,
                     posX + 1 - 4,
                     posY + 1 - 4,
                     24,
@@ -158,7 +138,7 @@ public abstract class IndexViewEntry<S extends IndexViewScreen<?>> {
         guiGraphics.item(this.itemStack, posX + 1, posY + 1);
         if (this.isHoveringSlot(posX, posY, mouseX, mouseY)) {
             guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
-                    SLOT_HIGHLIGHT_FRONT_SPRITE,
+                    AbstractContainerScreen.SLOT_HIGHLIGHT_FRONT_SPRITE,
                     posX + 1 - 4,
                     posY + 1 - 4,
                     24,

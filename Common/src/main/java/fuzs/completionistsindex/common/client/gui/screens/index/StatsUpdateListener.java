@@ -1,4 +1,4 @@
-package fuzs.completionistsindex.client.gui.screens.index;
+package fuzs.completionistsindex.common.client.gui.screens.index;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;

@@ -1,8 +1,8 @@
-package fuzs.completionistsindex.client.gui.screens.index;
+package fuzs.completionistsindex.common.client.gui.screens.index;
 
 import com.google.common.collect.Ordering;
-import fuzs.completionistsindex.CompletionistsIndex;
-import fuzs.completionistsindex.client.gui.components.index.IndexViewEntry;
+import fuzs.completionistsindex.common.CompletionistsIndex;
+import fuzs.completionistsindex.common.client.gui.components.index.IndexViewEntry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;
 
