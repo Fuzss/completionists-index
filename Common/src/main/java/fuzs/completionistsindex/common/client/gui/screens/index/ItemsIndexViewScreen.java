@@ -56,6 +56,10 @@ public class ItemsIndexViewScreen extends IndexViewScreen<StatsSorting> {
         return null;
     }
 
+    protected @Nullable Screen getLastScreen() {
+        return this.lastScreen;
+    }
+
     public @Nullable ServerPlayer getServerPlayer() {
         return this.isEditingPermitted ? this.serverPlayer : null;
     }
@@ -86,7 +90,7 @@ public class ItemsIndexViewScreen extends IndexViewScreen<StatsSorting> {
                 13,
                 BACK_BUTTON_SPRITES,
                 (Button button) -> {
-                    this.minecraft.setScreen(this.lastScreen);
+                    this.minecraft.gui.setScreen(this.getLastScreen());
                 })).setTooltip(Tooltip.create(CommonComponents.GUI_BACK));
         if (this.serverPlayer != null) {
             this.enableEditingButton = this.addRenderableWidget(this.createEditingButton(ENABLE_EDITING_BUTTON_SPRITES,
@@ -146,7 +150,7 @@ public class ItemsIndexViewScreen extends IndexViewScreen<StatsSorting> {
         if (super.keyPressed(keyEvent)) {
             return true;
         } else if (keyEvent.input() == InputConstants.KEY_BACKSPACE && this.shouldCloseOnEsc()) {
-            this.minecraft.setScreen(this.lastScreen);
+            this.minecraft.gui.setScreen(this.getLastScreen());
             return true;
         } else {
             return false;
@@ -155,8 +159,8 @@ public class ItemsIndexViewScreen extends IndexViewScreen<StatsSorting> {
 
     @Override
     public void onClose() {
-        if (this.lastScreen != null) {
-            this.lastScreen.onClose();
+        if (this.getLastScreen() != null) {
+            this.getLastScreen().onClose();
         }
     }
 }

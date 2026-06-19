@@ -102,7 +102,7 @@ public class IndexViewGroupEntry extends IndexViewEntry<ModsIndexViewScreen> {
     public void renderForeground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick, int posX, int posY, Font font) {
         super.renderForeground(guiGraphics, mouseX, mouseY, partialTick, posX, posY, font);
         Component progressComponent = this.getProgressComponent(this.collectedItems);
-        GuiGraphicsHelper.drawInBatch8xOutline(guiGraphics,
+        GuiGraphicsHelper.prepare8xTextOutline(guiGraphics,
                 font,
                 progressComponent,
                 posX + 70 - font.width(progressComponent) / 2,
@@ -118,7 +118,9 @@ public class IndexViewGroupEntry extends IndexViewEntry<ModsIndexViewScreen> {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent mouseButtonEvent) {
-        this.screen.minecraft.setScreen(new ItemsIndexViewScreen(this.screen, this.screen.isInGameUi(), this.items));
+        this.screen.minecraft.gui.setScreen(new ItemsIndexViewScreen(this.screen,
+                this.screen.isInGameUi(),
+                this.items));
         this.screen.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         return true;
     }

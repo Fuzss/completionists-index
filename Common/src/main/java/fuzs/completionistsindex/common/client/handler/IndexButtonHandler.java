@@ -3,6 +3,7 @@ package fuzs.completionistsindex.common.client.handler;
 import fuzs.completionistsindex.common.CompletionistsIndex;
 import fuzs.completionistsindex.common.client.gui.screens.index.ModsIndexViewScreen;
 import fuzs.completionistsindex.common.config.ClientConfig;
+import fuzs.completionistsindex.common.config.IndexButtonScreen;
 import fuzs.puzzleslib.common.api.client.gui.v2.components.ScreenElementPositioner;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
@@ -34,8 +35,7 @@ public class IndexButtonHandler {
     private static AbstractWidget collectorsLogButton;
 
     public static void onAfterInventoryScreenInit(InventoryScreen screen, int screenWidth, int screenHeight, List<AbstractWidget> widgets, UnaryOperator<AbstractWidget> addWidget, Consumer<AbstractWidget> removeWidget) {
-        if (CompletionistsIndex.CONFIG.get(ClientConfig.class).indexButtonScreen
-                == ClientConfig.IndexButtonScreen.PAUSE_MENU) {
+        if (CompletionistsIndex.CONFIG.get(ClientConfig.class).indexButtonScreen == IndexButtonScreen.PAUSE_MENU) {
             return;
         }
 
@@ -50,7 +50,7 @@ public class IndexButtonHandler {
                 18,
                 INVENTORY_BUTTON_SPRITES,
                 (Button button) -> {
-                    screen.minecraft.setScreen(new ModsIndexViewScreen(screen, true));
+                    screen.minecraft.gui.setScreen(new ModsIndexViewScreen(screen, true));
                 });
         addWidget.apply(collectorsLogButton);
     }
@@ -74,13 +74,12 @@ public class IndexButtonHandler {
     }
 
     public static void onAfterPauseScreenInit(PauseScreen screen, int screenWidth, int screenHeight, List<AbstractWidget> widgets, UnaryOperator<AbstractWidget> addWidget, Consumer<AbstractWidget> removeWidget) {
-        if (CompletionistsIndex.CONFIG.get(ClientConfig.class).indexButtonScreen
-                == ClientConfig.IndexButtonScreen.INVENTORY_MENU) {
+        if (CompletionistsIndex.CONFIG.get(ClientConfig.class).indexButtonScreen == IndexButtonScreen.INVENTORY_MENU) {
             return;
         }
 
         AbstractWidget abstractWidget = new ImageButton(20, 20, MENU_BUTTON_SPRITES, (Button button) -> {
-            screen.minecraft.setScreen(new ModsIndexViewScreen(screen, false));
+            screen.minecraft.gui.setScreen(new ModsIndexViewScreen(screen, false));
         }, CommonComponents.EMPTY);
         if (ScreenElementPositioner.tryPositionElement(abstractWidget, widgets, VANILLA_BUTTON_TRANSLATION_KEYS)) {
             addWidget.apply(abstractWidget);

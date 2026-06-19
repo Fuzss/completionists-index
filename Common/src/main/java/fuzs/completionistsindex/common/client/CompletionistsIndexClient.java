@@ -32,7 +32,7 @@ public class CompletionistsIndexClient implements ClientModConstructor {
     @Override
     public void onRegisterKeyMappings(KeyMappingsContext context) {
         context.registerKeyMapping(OPEN_INDEX_KEY_MAPPING, KeyActivationHandler.forGame((Minecraft minecraft) -> {
-            minecraft.setScreen(new ModsIndexViewScreen(null, false));
+            minecraft.gui.setScreen(new ModsIndexViewScreen(null, false));
         }));
     }
 }
