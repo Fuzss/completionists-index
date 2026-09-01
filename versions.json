@@ -6,11 +6,17 @@
     "26.1.x": "maintained",
     "26.2.x": "primary"
   },
-  "properties": {
-    "distributions.curseforge.id": "852667",
-    "distributions.curseforge.slug": "completionists-index",
-    "distributions.github.slug": "completionists-index",
-    "distributions.modrinth.id": "iSCGCCV1",
-    "distributions.modrinth.slug": "completionists-index"
+  "distributions": {
+    "curseforge": {
+      "id": "852667",
+      "slug": "completionists-index"
+    },
+    "github": {
+      "slug": "completionists-index"
+    },
+    "modrinth": {
+      "id": "iSCGCCV1",
+      "slug": "completionists-index"
+    }
   }
 }
