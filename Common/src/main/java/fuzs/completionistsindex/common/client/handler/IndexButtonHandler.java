@@ -9,6 +9,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -17,8 +18,6 @@ import net.minecraft.network.chat.CommonComponents;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 
 public class IndexButtonHandler {
     private static final WidgetSprites INVENTORY_BUTTON_SPRITES = new WidgetSprites(CompletionistsIndex.id(
@@ -34,12 +33,12 @@ public class IndexButtonHandler {
     @Nullable
     private static AbstractWidget collectorsLogButton;
 
-    public static void onAfterInventoryScreenInit(InventoryScreen screen, int screenWidth, int screenHeight, List<AbstractWidget> widgets, UnaryOperator<AbstractWidget> addWidget, Consumer<AbstractWidget> removeWidget) {
+    public static void onAfterInventoryScreenInit(InventoryScreen screen, int screenWidth, int screenHeight) {
         if (CompletionistsIndex.CONFIG.get(ClientConfig.class).indexButtonScreen == IndexButtonScreen.PAUSE_MENU) {
             return;
         }
 
-        recipeBookButton = findRecipeBookButton(widgets);
+        recipeBookButton = findRecipeBookButton(screen.children());
         if (recipeBookButton == null) {
             return;
         }
@@ -52,12 +51,12 @@ public class IndexButtonHandler {
                 (Button button) -> {
                     screen.minecraft.gui.setScreen(new ModsIndexViewScreen(screen, true));
                 });
-        addWidget.apply(collectorsLogButton);
+        screen.addRenderableWidget(collectorsLogButton);
     }
 
     @Nullable
-    private static AbstractWidget findRecipeBookButton(List<AbstractWidget> widgets) {
-        for (AbstractWidget widget : widgets) {
+    private static AbstractWidget findRecipeBookButton(List<? extends GuiEventListener> widgets) {
+        for (GuiEventListener widget : widgets) {
             if (widget instanceof ImageButton imageButton) {
                 return imageButton;
             }
@@ -73,7 +72,7 @@ public class IndexButtonHandler {
         }
     }
 
-    public static void onAfterPauseScreenInit(PauseScreen screen, int screenWidth, int screenHeight, List<AbstractWidget> widgets, UnaryOperator<AbstractWidget> addWidget, Consumer<AbstractWidget> removeWidget) {
+    public static void onAfterPauseScreenInit(PauseScreen screen, int screenWidth, int screenHeight) {
         if (CompletionistsIndex.CONFIG.get(ClientConfig.class).indexButtonScreen == IndexButtonScreen.INVENTORY_MENU) {
             return;
         }
@@ -81,8 +80,8 @@ public class IndexButtonHandler {
         AbstractWidget abstractWidget = new ImageButton(20, 20, MENU_BUTTON_SPRITES, (Button button) -> {
             screen.minecraft.gui.setScreen(new ModsIndexViewScreen(screen, false));
         }, CommonComponents.EMPTY);
-        if (ScreenElementPositioner.tryPositionElement(abstractWidget, widgets, VANILLA_BUTTON_TRANSLATION_KEYS)) {
-            addWidget.apply(abstractWidget);
+        if (ScreenElementPositioner.tryPositionElement(abstractWidget, screen.children(), VANILLA_BUTTON_TRANSLATION_KEYS)) {
+            screen.addRenderableWidget(abstractWidget);
         }
     }
 }
